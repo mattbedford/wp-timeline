@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Build output
+build/
+
+# WordPress
+*.log
+
+# PHPStorm
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+
+# Package lock (choose one - I'd keep package-lock.json)
+# package-lock.json
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Vendor (if you use Composer)
+vendor/
