@@ -1,0 +1,24 @@
+{
+  "name": "wp-timeline",
+  "version": "1.0.0",
+  "description": "A synchronized timeline block for WordPress",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "start": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js"
+  },
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "block",
+    "timeline"
+  ],
+  "author": "Your Name",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@wordpress/scripts": "^27.0.0"
+  }
+}

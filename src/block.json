@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "wp-timeline/timeline",
+  "title": "Timeline",
+  "category": "design",
+  "icon": "clock",
+  "description": "A synchronized timeline with years and content",
+  "keywords": ["timeline", "history", "chronology"],
+  "textdomain": "wp-timeline",
+  "editorScript": "file:./index.js",
+  "script": "file:./view.js",
+  "style": "file:./style-index.css",
+  "supports": {
+    "align": ["wide", "full"]
+  },
+  "attributes": {
+    "items": {
+      "type": "array",
+      "default": [
+        {
+          "year": "2015",
+          "clientId": ""
+        }
+      ]
+    }
+  }
+}

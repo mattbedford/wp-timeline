@@ -1,0 +1,15 @@
+{
+  "core": "WordPress/WordPress#6.7",
+  "plugins": [
+    "."
+  ],
+  "mappings": {
+    "wp-content/debug.log": "./debug.log"
+  },
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": true
+  }
+}
