@@ -44,7 +44,7 @@
 }
 
 .timeline-content-item {
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     padding: 2rem;
     min-height: 600px;
 }
