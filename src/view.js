@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let isScrollingYears = false;
         let isScrollingContent = false;
+        let scrollTimeout;
+        let checkScrollTimeout;
 
         // Smooth scroll function with easing
         function smoothScrollTo(element, target, duration = 800) {
@@ -31,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const change = target - start;
             const startTime = performance.now();
 
-            // Easing function (ease-in-out cubic)
             function easeInOutCubic(t) {
                 return t < 0.5
                     ? 4 * t * t * t
@@ -53,6 +54,53 @@ document.addEventListener('DOMContentLoaded', function() {
             requestAnimationFrame(animateScroll);
         }
 
+        // Find which item is closest to center of viewport
+        function findClosestItem() {
+            const containerRect = contentColumn.getBoundingClientRect();
+            const containerCenter = containerRect.top + (containerRect.height / 2);
+
+            let closestIndex = 0;
+            let closestDistance = Infinity;
+
+            timelineItems.forEach((item, index) => {
+                const itemRect = item.getBoundingClientRect();
+                const itemCenter = itemRect.top + (itemRect.height / 2);
+                const distance = Math.abs(itemCenter - containerCenter);
+
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestIndex = index;
+                }
+            });
+
+            return closestIndex;
+        }
+
+        // Handle scroll end - check which item is actually visible
+        function handleScrollEnd() {
+            if (!isScrollingContent) {
+                const closestIndex = findClosestItem();
+                updateActiveYear(closestIndex);
+
+                if (!isScrollingYears) {
+                    isScrollingYears = true;
+
+                    const targetYear = yearItems[closestIndex];
+                    const targetPosition = targetYear.offsetTop - yearsColumn.offsetTop - (yearsColumn.offsetHeight / 2) + (targetYear.offsetHeight / 2);
+
+                    smoothScrollTo(yearsColumn, targetPosition, 600);
+
+                    setTimeout(() => { isScrollingYears = false; }, 800);
+                }
+            }
+        }
+
+        // Listen for scroll events and debounce
+        contentColumn.addEventListener('scroll', () => {
+            clearTimeout(checkScrollTimeout);
+            checkScrollTimeout = setTimeout(handleScrollEnd, 150);
+        });
+
         // Click on year to scroll to content
         yearItems.forEach((yearItem, index) => {
             yearItem.addEventListener('click', () => {
@@ -70,26 +118,38 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Observe which content item is in view
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !isScrollingYears) {
-                    const index = Array.from(timelineItems).indexOf(entry.target);
-                    updateActiveYear(index);
+            let mostVisible = null;
+            let highestRatio = 0;
 
-                    if (!isScrollingContent) {
+            entries.forEach(entry => {
+                if (entry.intersectionRatio > highestRatio) {
+                    highestRatio = entry.intersectionRatio;
+                    mostVisible = entry;
+                }
+            });
+
+            if (mostVisible && mostVisible.intersectionRatio > 0.15 && !isScrollingYears) {
+                const index = Array.from(timelineItems).indexOf(mostVisible.target);
+                updateActiveYear(index);
+
+                if (!isScrollingContent) {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
                         isScrollingYears = true;
 
                         const targetYear = yearItems[index];
                         const targetPosition = targetYear.offsetTop - yearsColumn.offsetTop - (yearsColumn.offsetHeight / 2) + (targetYear.offsetHeight / 2);
 
-                        smoothScrollTo(yearsColumn, targetPosition, 1000);
+                        smoothScrollTo(yearsColumn, targetPosition, 600);
 
-                        setTimeout(() => { isScrollingYears = false; }, 1200);
-                    }
+                        setTimeout(() => { isScrollingYears = false; }, 800);
+                    }, 100);
                 }
-            });
+            }
         }, {
             root: contentColumn,
-            threshold: 0.5
+            threshold: [0, 0.15, 0.3, 0.5, 0.7, 0.85, 1.0],
+            rootMargin: '-10% 0px -10% 0px'
         });
 
         timelineItems.forEach(item => observer.observe(item));

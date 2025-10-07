@@ -19,16 +19,17 @@
     min-height: 80px;
     display: flex;
     align-items: center;
-    transition: background-color 0.3s;
+    background: none !important;
+    justify-content: center;
+    transition: all 0.3s ease-in-out;
 }
 
-.timeline-year-item:hover {
-    background-color: #f0f0f0;
-}
-
+.timeline-year-item:hover,
 .timeline-year-item.active {
-    background-color: #e0e0e0;
-    font-weight: bold;
+    font-weight: 800;
+    transform: scale(1.3);
+    color: var(--accent);
+    transition: all 0.3s ease-in-out;
 }
 
 /* Content column (right) */
@@ -40,6 +41,19 @@
 
 .timeline-item {
     padding: 2rem;
+}
+
+.timeline-item-inner {
+    min-height: 400px;
+    margin: 0;
+}
+
+.timeline-item-inner img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 40px;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -70,4 +84,14 @@
     .timeline-item {
         min-height: auto;
     }
+}
+
+/*Fixes*/
+.wp-timeline-years {
+    overflow-x:hidden;
+}
+
+.timeline-item-inner {
+    min-height: 700px; /* Increased from 400px */
+    margin: 0;
 }
