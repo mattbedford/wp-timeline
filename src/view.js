@@ -25,13 +25,46 @@ document.addEventListener('DOMContentLoaded', function() {
         let isScrollingYears = false;
         let isScrollingContent = false;
 
+        // Smooth scroll function with easing
+        function smoothScrollTo(element, target, duration = 800) {
+            const start = element.scrollTop;
+            const change = target - start;
+            const startTime = performance.now();
+
+            // Easing function (ease-in-out cubic)
+            function easeInOutCubic(t) {
+                return t < 0.5
+                    ? 4 * t * t * t
+                    : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            }
+
+            function animateScroll(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeInOutCubic(progress);
+
+                element.scrollTop = start + (change * eased);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateScroll);
+                }
+            }
+
+            requestAnimationFrame(animateScroll);
+        }
+
         // Click on year to scroll to content
         yearItems.forEach((yearItem, index) => {
             yearItem.addEventListener('click', () => {
                 isScrollingContent = true;
-                timelineItems[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                const targetItem = timelineItems[index];
+                const targetPosition = targetItem.offsetTop - contentColumn.offsetTop;
+
+                smoothScrollTo(contentColumn, targetPosition, 1000);
                 updateActiveYear(index);
-                setTimeout(() => { isScrollingContent = false; }, 1000);
+
+                setTimeout(() => { isScrollingContent = false; }, 1200);
             });
         });
 
@@ -44,8 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (!isScrollingContent) {
                         isScrollingYears = true;
-                        yearItems[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        setTimeout(() => { isScrollingYears = false; }, 1000);
+
+                        const targetYear = yearItems[index];
+                        const targetPosition = targetYear.offsetTop - yearsColumn.offsetTop - (yearsColumn.offsetHeight / 2) + (targetYear.offsetHeight / 2);
+
+                        smoothScrollTo(yearsColumn, targetPosition, 1000);
+
+                        setTimeout(() => { isScrollingYears = false; }, 1200);
                     }
                 }
             });

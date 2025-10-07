@@ -11,12 +11,9 @@
     flex: 0 0 200px;
     height: 600px;
     overflow-y: auto;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
 }
 
 .timeline-year-item {
-    scroll-snap-align: start;
     padding: 1rem;
     cursor: pointer;
     min-height: 80px;
@@ -39,15 +36,12 @@
     flex: 1;
     height: 600px;
     overflow-y: auto;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
 }
 
-.timeline-content-item {
-    scroll-snap-align: center;
+.timeline-item {
     padding: 2rem;
-    min-height: 600px;
 }
+
 /* Hide scrollbar but keep functionality */
 .wp-timeline-content {
     scrollbar-width: none; /* Firefox */
@@ -57,6 +51,7 @@
 .wp-timeline-content::-webkit-scrollbar {
     display: none; /* Chrome/Safari/Opera */
 }
+
 /* Mobile - hide years, show content only */
 @media (max-width: 768px) {
     .wp-timeline-container {
@@ -70,10 +65,9 @@
     .wp-timeline-content {
         height: auto;
         overflow-y: visible;
-        scroll-snap-type: none;
     }
 
-    .timeline-content-item {
+    .timeline-item {
         min-height: auto;
     }
 }
