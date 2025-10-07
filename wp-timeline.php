@@ -4,7 +4,7 @@
 Plugin Name: Wp Timeline
 Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
 Description: A brief description of the Plugin.
-Version: 3.0
+Version: 3.2
 Author: Matt Bedford
 Author URI: https://mattbedford.com
 Text Domain: wp-timeline
